@@ -1,13 +1,44 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
+import Home from './rotas/Home';
 import reportWebVitals from './reportWebVitals';
+import { createGlobalStyle } from 'styled-components';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Header from './componentes/Header';
+import ClientesM from './rotas/Clientes';
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+      monospace;
+  }
+
+`
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <GlobalStyle/>
+    <BrowserRouter>
+    <Header/>
+    <Routes>
+        <Route path='/início' element={<Home/>}/>
+        <Route path="/clientes" element={<ClientesM/>} />
+        <Route path='/' element={<Home/>}/>
+      </Routes>
+    
+    </BrowserRouter>
+
+    
   </React.StrictMode>
 );
 

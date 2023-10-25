@@ -1,0 +1,100 @@
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+}
+
+.dashboard {
+  background-color: #f5f5f5;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+header {
+  text-align: center;
+  color: #3498db;
+}
+
+h1 {
+  margin-bottom: 5px;
+}
+
+main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.painel, .dados {
+  flex: 1; 
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.agenda {
+  flex-flow: row wrap;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.ordens {
+  
+  flex-wrap: wrap;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 15px;
+}
+
+
+
+.agenda h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #3498db;
+}
+
+.react-calendar {
+  width: 100%;
+  max-width: 400px; /* Adjust the maximum width as needed */
+  margin: 0 auto; /* Center the calendar */
+}
+
+.react-calendar__tile--active {
+  background-color: #3498db; /* Color for the active date */
+  color: #fff;
+}
+
+.react-calendar__tile--now {
+  background-color: #e0e0e0; /* Color for the current date */
+}
+
+
+
+
+footer {
+  text-align: center;
+  padding: 10px;
+  background-color: #3498db;
+  color: #fff;
+
+  bottom: 0;
+  width: 100%;
+}
