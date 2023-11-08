@@ -29,10 +29,7 @@ function Corpo() {
           </ul>
         </section>
 
-        <section className="agenda">
-          <h3>Agenda</h3>
-          <Calendar onChange={setDate} value={date} />
-        </section>
+        
 
         <section className="ordens">
           <h3>Ordens de Serviço Recentes</h3>

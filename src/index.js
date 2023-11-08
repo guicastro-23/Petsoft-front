@@ -5,7 +5,8 @@ import reportWebVitals from './reportWebVitals';
 import { createGlobalStyle } from 'styled-components';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from './componentes/Header';
-import ClientesM from './rotas/Clientes';
+
+import Servicos from './rotas/Servicos';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -32,7 +33,8 @@ root.render(
     <Header/>
     <Routes>
         <Route path='/início' element={<Home/>}/>
-        <Route path="/clientes" element={<ClientesM/>} />
+       
+        <Route path="/serviços" element={<Servicos/>} />
         <Route path='/' element={<Home/>}/>
       </Routes>
     
