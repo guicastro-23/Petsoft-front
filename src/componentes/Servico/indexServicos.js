@@ -1,25 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './servicos.css';
+import { getServicos } from '../../servicos/servicos';
 
 function Servico() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [servicos, setServicos] = useState([]);
   const [filteredServices, setFilteredServices] = useState([]);
 
-  // Dummy services data for demonstration
-  const services = [
-    { id: 1, nome: 'Serviço A', valor: '100.00' },
-    { id: 2, nome: 'Serviço B', valor: '75.00' },
-    // Add more services as needed
-  ];
+  useEffect(() => {
+    fetchServicos();
+  }, []);
+
+  async function fetchServicos() {
+    const servicosApi = await getServicos();
+    setServicos(servicosApi);
+    // Initially, set filtered services to all services
+    setFilteredServices(servicosApi);
+  }
+  
 
   const handleSearch = (event) => {
     const term = event.target.value.toLowerCase();
     setSearchTerm(term);
 
     // Filter services based on the service name
-    const filtered = services.filter(
-      (service) =>
-        service.nome.toLowerCase().includes(term)
+    const filtered = servicos.filter(
+      (service) => service.nome.toLowerCase().includes(term)
     );
 
     setFilteredServices(filtered);
@@ -65,14 +71,9 @@ function Servico() {
               </div>
             ))
           ) : (
-            // Display the default form if no search results
+            // Display a message when no matching services
             <div className="informacao">
-              <label htmlFor="id">ID</label>
-              <input type="text" id="id" placeholder="ID do serviço" />
-              <label htmlFor="nome-servico">Nome do serviço</label>
-              <input type="text" id="nome-servico" placeholder="Nome do serviço" />
-              <label htmlFor="valor-servico">Valor do serviço</label>
-              <input type="text" id="valor-servico" placeholder="Valor do serviço" />
+              <p>No matching services found.</p>
             </div>
           )}
           <div className="acoes">
