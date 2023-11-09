@@ -1,17 +1,26 @@
-// src/services/clientService.js
+// clientesCrud.js
+import axios from "axios";
 
-const clients = [
-    { id: 1, name: 'Cliente 1', address: 'Endereço 1', phone: '123-456-7890' },
-    { id: 2, name: 'Cliente 2', address: 'Endereço 2', phone: '987-654-3210' },
-    // Adicione mais clientes conforme necessário
-  ];
-  
-  export const getAllClients = async () => {
-    // Simulando uma chamada assíncrona à API
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(clients);
-      }, 1000);
-    });
-  };
-  
+const clientesApi = axios.create({ baseURL: "http://localhost:8000/clientes" });
+
+async function getClientes() {
+  const response = await clientesApi.get('/');
+  return response.data;
+}
+
+async function createCliente(newCliente) {
+  const response = await clientesApi.post('/', newCliente);
+  return response.data;
+}
+
+async function updateCliente(id, updatedCliente) {
+  const response = await clientesApi.put(`/${id}`, updatedCliente);
+  return response.data;
+}
+
+async function deleteCliente(id) {
+  const response = await clientesApi.delete(`/${id}`);
+  return response.data;
+}
+
+export { getClientes, createCliente, updateCliente, deleteCliente };

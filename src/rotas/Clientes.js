@@ -1,47 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { getAllClients } from '../serviços/clientes';
 
-function ClientesM() {
-  const [clients, setClients] = useState([]);
+import styled from 'styled-components'
+import Cliente from '../componentes/Cliente/indexClientes';
 
-  useEffect(() => {
-    async function fetchClients() {
-      try {
-        const data = await getAllClients();
-        setClients(data);
-      } catch (error) {
-        console.error('Erro ao buscar clientes:', error);
-      }
-    }
 
-    fetchClients();
-  }, []);
 
-  return (
-    <div>
-      <h2>Lista de Clientes</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Endereço</th>
-            <th>Telefone</th>
-          </tr>
-        </thead>
-        <tbody>
-          {clients.map((client) => (
-            <tr key={client.id}>
-              <td>{client.id}</td>
-              <td>{client.name}</td>
-              <td>{client.address}</td>
-              <td>{client.phone}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+const AppContainer = styled.div`
+
+    width: 100vw;
+    height: 100vh;
+    background-color: aqua;
+  
+`
+
+function Clientes() {
+    return (
+        <AppContainer>
+          <Cliente/>
+        </AppContainer>
+      );
 }
 
-export default ClientesM;
+export default Clientes;

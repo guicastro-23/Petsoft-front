@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from './componentes/Header';
 
 import Servicos from './rotas/Servicos';
+import Clientes from './rotas/Clientes';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -33,7 +34,7 @@ root.render(
     <Header/>
     <Routes>
         <Route path='/início' element={<Home/>}/>
-       
+        <Route path='/clientes' element={<Clientes/>}/>
         <Route path="/serviços" element={<Servicos/>} />
         <Route path='/' element={<Home/>}/>
       </Routes>
