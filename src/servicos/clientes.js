@@ -19,8 +19,14 @@ async function updateCliente(id, updatedCliente) {
 }
 
 async function deleteCliente(id) {
-  const response = await clientesApi.delete(`/${id}`);
-  return response.data;
+  try {
+    const response = await clientesApi.delete(`/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting client:', error.response);  
+    throw error; 
+  }
 }
+
 
 export { getClientes, createCliente, updateCliente, deleteCliente };

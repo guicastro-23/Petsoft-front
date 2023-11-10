@@ -1,12 +1,49 @@
 // Cliente.js
 import React, { useState, useEffect } from 'react';
-import './clientes.css';
-import { getClientes, createCliente, updateCliente, deleteCliente } from '../../servicos/clientes';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { getClientes, deleteCliente } from '../../servicos/clientes';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align items to the start (left) */
+  padding: 20px; /* Add padding for better spacing */
+`;
+
+const Tabela = styled.table`
+  width: 80%;
+  border-collapse: collapse;
+  margin-top: 20px;
+`;
+
+const Cabecalho = styled.th`
+  padding: 10px;
+  text-align: left;
+`;
+
+const Linha = styled.tr`
+  border-bottom: 1px solid #ddd;
+`;
+
+const Coluna = styled.td`
+  padding: 10px;
+`;
+
+const Botao = styled.button`
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  text-decoration: none;
+`;
 
 function Cliente() {
   const [clientes, setClientes] = useState([]);
   const [filteredClientes, setFilteredClientes] = useState([]);
-  const [newCliente, setNewCliente] = useState({ nome: '', logradouro: '', telefone: '', pet: '' });
 
   useEffect(() => {
     fetchClientes();
@@ -16,7 +53,6 @@ function Cliente() {
     try {
       const clientesApi = await getClientes();
       setClientes(clientesApi);
-      // Initially, set filtered clients to all clients
       setFilteredClientes(clientesApi);
     } catch (error) {
       console.error('Error fetching clients:', error);
@@ -25,102 +61,60 @@ function Cliente() {
 
   const handleSearch = (event) => {
     const term = event.target.value.toLowerCase();
-    // Filter clients based on the client name
     const filtered = clientes.filter(
       (client) => client.nome.toLowerCase().includes(term)
     );
     setFilteredClientes(filtered);
   };
 
-  const handleCreate = async () => {
-    try {
-      const createdCliente = await createCliente(newCliente);
-      setClientes([...clientes, createdCliente]);
-      setFilteredClientes([...clientes, createdCliente]); // Update filtered clients
-      setNewCliente({ nome: '', logradouro: '', telefone: '', pet: '' });
-    } catch (error) {
-      console.error('Error creating client:', error);
-    }
-  };
-
-  const handleDelete = async (id) => {
+  async function deletarCliente(id) {
     try {
       await deleteCliente(id);
-      const updatedClientes = clientes.filter((client) => client.id !== id);
-      setClientes(updatedClientes);
-      setFilteredClientes(updatedClientes); // Update filtered clients
+      setClientes((prevClients) => prevClients.filter((client) => client.id !== id));
+      setFilteredClientes((prevFiltered) => prevFiltered.filter((client) => client.id !== id));
+      alert(`Cliente de ID: ${id} deletado!`);
     } catch (error) {
       console.error('Error deleting client:', error);
+      alert('Erro ao deletar o cliente. Por favor, tente novamente.');
     }
-  };
+  }
 
   return (
-    <div>
+    <Container>
+      {/* Use Link for navigation to the new client page */}
+      <Link to="/novo-cliente">
+        <Botao>Novo Cliente</Botao>
+      </Link>
       <h2>Clientes</h2>
-      <div className='perquisar'>
-         <input
-         
-         id="search"
-         placeholder="Pesquisar clientes"
-         onChange={handleSearch}
-        />  
-      </div>
-      
+      <input
+        id="search"
+        placeholder="Pesquisar clientes"
+        onChange={handleSearch}
+      />
 
-      <form>
-        <div className="informacao">
-          <label htmlFor="nome">Nome do Cliente</label>
-          <input
-            type="text"
-            id="nome"
-            value={newCliente.nome}
-            onChange={(e) => setNewCliente({ ...newCliente, nome: e.target.value })}
-          />
-        </div>
-        <div className="informacao">
-          <label htmlFor="logradouro">Logradouro</label>
-          <input
-            type="text"
-            id="logradouro"
-            value={newCliente.logradouro}
-            onChange={(e) => setNewCliente({ ...newCliente, logradouro: e.target.value })}
-          />
-        </div>
-        <div className="informacao">
-          <label htmlFor="telefone">Telefone</label>
-          <input
-            type="text"
-            id="telefone"
-            value={newCliente.telefone}
-            onChange={(e) => setNewCliente({ ...newCliente, telefone: e.target.value })}
-          />
-        </div>
-        <div className="informacao">
-          <label htmlFor="pet">Pet</label>
-          <input
-            type="text"
-            id="pet"
-            value={newCliente.pet}
-            onChange={(e) => setNewCliente({ ...newCliente, pet: e.target.value })}
-          />
-        </div>
+      <Tabela>
+        <thead>
+          <tr>
+            <Cabecalho>Nome</Cabecalho>
+            <Cabecalho>Email</Cabecalho>
+            <Cabecalho></Cabecalho>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredClientes.map((client) => (
+            <Linha key={client.id}>
+              <Coluna>{client.nome}</Coluna>
+              <Coluna>{client.email}</Coluna>
+              <Coluna>
+                <Botao onClick={() => deletarCliente(client.id)}>Excluir</Botao>
+              </Coluna>
+            </Linha>
+          ))}
+        </tbody>
+      </Tabela>
 
-        <div className="acoes">
-          <button type="button" onClick={handleCreate}>Adicionar Cliente</button>
-        </div>
-      </form>
-
-      {/* Display clients with delete button */}
-      {filteredClientes.map((client) => (
-        <div key={client.id} className="informacao">
-          <p><strong>Nome:</strong> {client.nome}</p>
-          <p><strong>Logradouro:</strong> {client.logradouro}</p>
-          <p><strong>Telefone:</strong> {client.telefone}</p>
-          <p><strong>Pet:</strong> {client.pet}</p>
-          <button onClick={() => handleDelete(client.id)}>Delete</button>
-        </div>
-      ))}
-    </div>
+      {/* Modal component can be added here */}
+    </Container>
   );
 }
 

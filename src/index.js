@@ -8,6 +8,8 @@ import Header from './componentes/Header';
 
 import Servicos from './rotas/Servicos';
 import Clientes from './rotas/Clientes';
+import NovoCliente from './rotas/NovoCliente';
+
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -35,6 +37,7 @@ root.render(
     <Routes>
         <Route path='/início' element={<Home/>}/>
         <Route path='/clientes' element={<Clientes/>}/>
+        <Route path='/novo-cliente' element={<NovoCliente/>}/>
         <Route path="/serviços" element={<Servicos/>} />
         <Route path='/' element={<Home/>}/>
       </Routes>
