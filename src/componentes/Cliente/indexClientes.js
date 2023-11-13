@@ -1,14 +1,19 @@
-// Cliente.js
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { Link } from 'react-router-dom';
 import { getClientes, deleteCliente } from '../../servicos/clientes';
+import ClienteModal from '../NovoCliente/ClienteModal'
+import { ModalOverlay, ModalContent } from '../NovoCliente/ClienteModal'; // Adjust the path accordingly
+
+
+// Styled components for the modals
+// ... (previous imports)
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Align items to the start (left) */
-  padding: 20px; /* Add padding for better spacing */
+  align-items: flex-start;
+  padding: 20px;
 `;
 
 const Tabela = styled.table`
@@ -41,9 +46,22 @@ const Botao = styled.button`
   text-decoration: none;
 `;
 
+const ModalBotao = styled.button`
+  padding: 10px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-right: 10px;
+`;
+
 function Cliente() {
   const [clientes, setClientes] = useState([]);
   const [filteredClientes, setFilteredClientes] = useState([]);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [selectedClientId, setSelectedClientId] = useState(null);
 
   useEffect(() => {
     fetchClientes();
@@ -67,23 +85,48 @@ function Cliente() {
     setFilteredClientes(filtered);
   };
 
-  async function deletarCliente(id) {
+  const handleDelete = async (id) => {
     try {
       await deleteCliente(id);
       setClientes((prevClients) => prevClients.filter((client) => client.id !== id));
       setFilteredClientes((prevFiltered) => prevFiltered.filter((client) => client.id !== id));
+      closeModal();
       alert(`Cliente de ID: ${id} deletado!`);
     } catch (error) {
       console.error('Error deleting client:', error);
       alert('Erro ao deletar o cliente. Por favor, tente novamente.');
     }
-  }
+  };
+
+  const openDeleteModal = (id) => {
+    setSelectedClientId(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const openAddModal = () => {
+    setIsAddModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedClientId(null);
+    setIsDeleteModalOpen(false);
+    setIsAddModalOpen(false);
+  };
+
+  // Handle the "Adicionar" button click
+  const handleAddClient = (newClientData) => {
+    // Add logic to send the new client data to your backend or perform the necessary actions
+    // For now, just log the data
+    console.log('New client data:', newClientData);
+
+    // Close the modal
+    closeModal();
+  };
 
   return (
     <Container>
-      {/* Use Link for navigation to the new client page */}
-      <Link to="/novo-cliente">
-        <Botao>Novo Cliente</Botao>
+      <Link>
+        <Botao onClick={openAddModal}>Novo Cliente</Botao>
       </Link>
       <h2>Clientes</h2>
       <input
@@ -96,24 +139,34 @@ function Cliente() {
         <thead>
           <tr>
             <Cabecalho>Nome</Cabecalho>
-            <Cabecalho>Email</Cabecalho>
-            <Cabecalho></Cabecalho>
+            <Cabecalho>Telefone</Cabecalho>
+            <Cabecalho>Ações</Cabecalho>
           </tr>
         </thead>
         <tbody>
           {filteredClientes.map((client) => (
             <Linha key={client.id}>
               <Coluna>{client.nome}</Coluna>
-              <Coluna>{client.email}</Coluna>
+              <Coluna>{client.telefone}</Coluna>
               <Coluna>
-                <Botao onClick={() => deletarCliente(client.id)}>Excluir</Botao>
+                <Botao onClick={() => openDeleteModal(client.id)}>Excluir</Botao>
               </Coluna>
             </Linha>
           ))}
         </tbody>
       </Tabela>
 
-      {/* Modal component can be added here */}
+      {/* Delete Modal component */}
+      <ModalOverlay isOpen={isDeleteModalOpen} onClick={closeModal} />
+      <ModalContent isOpen={isDeleteModalOpen}>
+        <h3>Confirmação de Exclusão</h3>
+        <p>Deseja realmente excluir este cliente?</p>
+        <ModalBotao onClick={() => handleDelete(selectedClientId)}>Excluir</ModalBotao>
+        <ModalBotao onClick={closeModal}>Cancelar</ModalBotao>
+      </ModalContent>
+
+      {/* Add Modal component */}
+      <ClienteModal isOpen={isAddModalOpen} closeModal={closeModal} handleAddClient={handleAddClient} />
     </Container>
   );
 }
