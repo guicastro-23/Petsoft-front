@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { getClientes, deleteCliente } from '../../servicos/clientes';
+import { getClientes, deleteCliente, createCliente } from '../../servicos/clientes';
 import ClienteModal from '../NovoCliente/ClienteModal'
 import { ModalOverlay, ModalContent } from '../NovoCliente/ClienteModal'; // Adjust the path accordingly
 
@@ -114,13 +114,20 @@ function Cliente() {
   };
 
   // Handle the "Adicionar" button click
-  const handleAddClient = (newClientData) => {
-    // Add logic to send the new client data to your backend or perform the necessary actions
-    // For now, just log the data
-    console.log('New client data:', newClientData);
+  const handleAddClient = async (newClientData) => {
+    try {
+      // Replace with your actual API call or database interaction logic
+      await createCliente(newClientData);
 
-    // Close the modal
-    closeModal();
+      // Refresh the client list after adding a new client
+      fetchClientes();
+
+      // Close the modal
+      closeModal();
+    } catch (error) {
+      console.error('Error adding client:', error);
+      alert('Erro ao adicionar o cliente. Por favor, tente novamente.');
+    }
   };
 
   return (
